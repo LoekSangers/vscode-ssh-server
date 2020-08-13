@@ -7,3 +7,7 @@ This repository contains the definition for the POD/container in my Kubernetes C
 
 - Local:
   - Remote - SSH
+
+
+#CICD
+This repoistory is also my first attempt at using GitHub Actions to automatically deploy a container to Docker Hub. 
