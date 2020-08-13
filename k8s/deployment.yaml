@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vscode-deployment
+spec:
+  selector:
+    matchLabels:
+      app: vscode
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vscode
+    spec:
+      containers:
+      - name: vscode
+        image: localhost:32000/openssh:latest 
+        command: [./entrypoint.sh]
+        ports:
+        - containerPort: 22
+        volumeMounts:
+        - mountPath: /home/lsangers
+          name: nfs-lsangers
+        - mountPath: /home/lsangers/project
+          name: nfs
+        - mountPath: /etc/ssh
+          name: nfs-secrets
+      volumes:
+      - name: nfs-lsangers
+        nfs:
+          server: 10.0.0.3
+          path: "/home/lsangers/nfs/k8s/data/vscode/home"
+      - name: nfs
+        nfs:
+          server: 10.0.0.3
+          path: "/home/lsangers/nfs/k8s"
+      - name: nfs-secrets
+        nfs:
+          server: 10.0.0.3
+          path: "/home/lsangers/nfs/secrets/ssh"
+          
+---
+kind: Service
+apiVersion: v1
+metadata: 
+  name: vscode-service
+spec:
+  type: LoadBalancer 
+  selector:
+    app: vscode
+  ports:
+    - name: ssh
+      protocol: TCP
+      port: 22
+      targetPort: 22
+  loadBalancerIP: 10.0.2.253

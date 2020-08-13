@@ -1,0 +1,35 @@
+FROM ubuntu:latest
+
+# Avoid warnings by switching to noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Configure apt and install packages
+RUN apt-get update \
+    && apt-get -y install --no-install-recommends \
+    lsb-release \
+    apt-utils \
+    dialog \
+    wget \
+    ca-certificates \
+    openssh-server \
+    sudo \
+    vim \
+    git \
+    curl \
+    #
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -g 1000 lsangers && useradd -r -u 1000 -g lsangers lsangers
+RUN usermod -aG sudo lsangers
+RUN echo "lsangers ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/lsangers
+
+RUN mkdir /home/lsangers
+RUN chown lsangers:lsangers /home/lsangers
+
+WORKDIR /home/lsangers
+USER lsangers:lsangers
+
+ENV DEBIAN_FRONTEND=dialog
