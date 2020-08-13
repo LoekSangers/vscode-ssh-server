@@ -17,7 +17,7 @@ jobs:
           echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
           echo ::set-output name=releaseDate::$(date -u +"%FT%T.000Z")
       - name: Build the Docker image
-        run: docker build --tag loeksangers/${{ github.repository }}:${{ steps.vars.outputs.tag }} .
+        run: docker build --tag loeksangers/${{ github.repository }}:${{ steps.vars.outputs.tag }} Docker/
       - name: Login into Docker Registry
         run: docker login -u loeksangers -p ${{ secrets.DOCKER_ACCES_TOKEN }}
       - name: Push image to Docker Registry

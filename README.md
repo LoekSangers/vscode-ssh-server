@@ -3,7 +3,7 @@ This repository contains the definition for the POD/container in my Kubernetes C
 
 #Installed Extensions:
 - Remote:
-- - Commit Message Editor
+  - Commit Message Editor
 
 - Local:
-- - Remote - SSH
+  - Remote - SSH
