@@ -16,9 +16,10 @@ jobs:
         run: |
           echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
           echo ::set-output name=releaseDate::$(date -u +"%FT%T.000Z")
+          echo ::set-output name=image::$(echo ${{ github.repository }} | awk -F'/' '{print $2}' )
       - name: Build the Docker image
-        run: docker build --tag loeksangers/${{ github.repository }}:${{ steps.vars.outputs.tag }} Docker/
+        run: docker build --tag loeksangers/${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.tag }} Docker/
       - name: Login into Docker Registry
         run: docker login -u loeksangers -p ${{ secrets.DOCKER_ACCES_TOKEN }}
       - name: Push image to Docker Registry
-        run: docker push loeksangers/${{ github.repository }}:${{ steps.vars.outputs.tag }}
+        run: docker push loeksangers/${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.tag }}
