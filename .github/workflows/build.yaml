@@ -1,0 +1,24 @@
+name: Build
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set environment variables
+        id: vars
+        run: |
+          echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+          echo ::set-output name=releaseDate::$(date -u +"%FT%T.000Z")
+      - name: Build the Docker image
+        run: docker build --tag loeksangers/${{ github.repository }}:${{ steps.vars.outputs.tag }} .
+      - name: Login into Docker Registry
+        run: docker login -u loeksangers -p ${{ secrets.DOCKER_ACCES_TOKEN }}
+      - name: Push image to Docker Registry
+        run: docker push loeksangers/${{ github.repository }}:${{ steps.vars.outputs.tag }}
