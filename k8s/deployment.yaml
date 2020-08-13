@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: vscode
-        image: localhost:32000/openssh:latest 
+        image: loeksangers/vscode-ssh-server:latest 
         command: [./entrypoint.sh]
         ports:
         - containerPort: 22
