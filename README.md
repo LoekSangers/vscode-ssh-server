@@ -2,9 +2,6 @@
 This repository contains the definition for the POD/container in my Kubernetes Cluster from which I develop.
 
 #Installed Extensions:
-- Remote:
-  - 
-
 - Local:
   - Remote - SSH
 
